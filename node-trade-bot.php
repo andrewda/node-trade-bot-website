@@ -1,10 +1,11 @@
 <?php
-    $servername = ""; // mysql host
-    $username = ""; // mysql user
-    $password = ""; // mysql password
-    $dbname = ""; // mysql database
+    $servername = "";
+    $username = "";
+    $password = "";
+    $dbname = "";
 
-    $myfile = fopen("history.txt", "r+") or die("Unable to open file!");
+    $current = file_get_contents("history.txt");
+    $history = fopen("history.txt", "w+") or die("Unable to open file!");
     
     // Create connection
     $conn = new mysqli($servername, $username, $password, $dbname);
@@ -13,18 +14,25 @@
         die("Connection failed: " . $conn->connect_error);
     } 
     
-    $sql = "SELECT * FROM donations ORDER BY id DESC";
+    preg_match("/^ID: ([0-9]+)/", $current, $match);
+    
+    $sql = "SELECT * FROM donations WHERE id>" . $match[1] . " ORDER BY id DESC";
     $result = $conn->query($sql);
     
     if ($result->num_rows > 0) {
+        $txt = "";
         while($row = $result->fetch_assoc()) {
-            $txt = "ID: " . $row["id"]. " - SteamID: " . $row["sid"]. " - Items Donated: " . $row["amount"] . "<br>";
-            fwrite($myfile, $txt);
+            $txt = $txt . "ID: " . $row["id"]. " - SteamID: " . $row["sid"]. " - Items Donated: " . $row["amount"] . "<br>";
+            echo $txt;
         }
+        $toWrite = str_replace("Resource id #4", "", $txt . $current);
+        echo $toWrite;
+        fwrite($history, $toWrite);
     } else {
         echo "0 results";
+        fwrite($history, $current);
     }
     
-    fclose($myfile);
+    fclose($history);
     $conn->close();
 ?>
