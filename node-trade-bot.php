@@ -4,6 +4,8 @@
     $password = ""; // mysql password
     $dbname = ""; // mysql database
 
+    $myfile = fopen("history.txt", "r+") or die("Unable to open file!");
+    
     // Create connection
     $conn = new mysqli($servername, $username, $password, $dbname);
     // Check connection
@@ -11,17 +13,18 @@
         die("Connection failed: " . $conn->connect_error);
     } 
     
-    $sql = "SELECT id, sid, amount FROM donations";
+    $sql = "SELECT * FROM donations ORDER BY id DESC";
     $result = $conn->query($sql);
     
-    
     if ($result->num_rows > 0) {
-        // output data of each row
         while($row = $result->fetch_assoc()) {
-            echo "ID: " . $row["id"]. " - SteamID: " . $row["sid"]. " - Items Donated: " . $row["amount"] . "<br>";
+            $txt = "ID: " . $row["id"]. " - SteamID: " . $row["sid"]. " - Items Donated: " . $row["amount"] . "<br>";
+            fwrite($myfile, $txt);
         }
     } else {
         echo "0 results";
     }
+    
+    fclose($myfile);
     $conn->close();
 ?>
