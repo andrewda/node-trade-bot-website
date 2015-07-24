@@ -1,23 +1,29 @@
 <html>
     <head>
         <script>
+        window.onload = update;
+        
         function update() {
-            var xmlhttp = new XMLHttpRequest();
-            xmlhttp.onreadystatechange = function() {
-                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                    document.getElementById("txtHint").innerHTML = xmlhttp.responseText;
+            var history = new XMLHttpRequest();
+            var updateTrades  = new XMLHttpRequest();
+            
+            history.onreadystatechange = function() {
+                if (history.readyState == 4 && history.status == 200) {
+                    document.getElementById("txtHint").innerHTML = history.responseText;
                 }
             }
-            xmlhttp.open("GET", "node-trade-bot.php", true);
-            xmlhttp.send();
+            
+            updateTrades.open("GET", "node-trade-bot.php", true);
+            updateTrades.send();
+            
+            history.open("GET", "history.txt", true);
+            history.send();
         }
         </script>
     </head>
     <body>
-        <form> 
-            <button type="button" onclick="update()">Update</button>
-        </form>
-        <p>Data:</p>
+        <button type="button" onclick="location.reload();">Update</button>
+        <p>Donations:</p>
         <span id="txtHint"></span>
     </body>
 </html>
