@@ -1,1 +1,23 @@
-
+<html>
+    <head>
+        <script>
+        function update() {
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    document.getElementById("txtHint").innerHTML = xmlhttp.responseText;
+                }
+            }
+            xmlhttp.open("GET", "node-trade-bot.php", true);
+            xmlhttp.send();
+        }
+        </script>
+    </head>
+    <body>
+        <form> 
+            <button type="button" onclick="update()">Update</button>
+        </form>
+        <p>Data:</p>
+        <span id="txtHint"></span>
+    </body>
+</html>
