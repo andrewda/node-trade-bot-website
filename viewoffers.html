@@ -1,20 +1,19 @@
 <html>
     <head>
         <script>
-        window.onload = update;
+        window.onload = function() {
+            update();
+            document.getElementById("frame").src = "node-trade-bot.php";
+        };
         
         function update() {
             var history = new XMLHttpRequest();
-            var updateTrades  = new XMLHttpRequest();
             
             history.onreadystatechange = function() {
                 if (history.readyState == 4 && history.status == 200) {
                     document.getElementById("txtHint").innerHTML = history.responseText;
                 }
             }
-            
-            updateTrades.open("GET", "node-trade-bot.php", true);
-            updateTrades.send();
             
             history.open("GET", "history.txt", true);
             history.send();
@@ -25,5 +24,6 @@
         <button type="button" onclick="location.reload();">Update</button>
         <p>Donations:</p>
         <span id="txtHint"></span>
+        <iframe id="frame" src="about:blank" style="visibility:hidden;display:none"></iframe>
     </body>
 </html>
