@@ -3,26 +3,45 @@
         <script>
         window.onload = function() {
             update();
-            document.getElementById("frame").src = "node-trade-bot.php";
+            
+            setInterval(function() {
+                update();
+            }, 10000);
         };
         
         function update() {
+            document.getElementById("frame").src = "about:blank";
+            document.getElementById("frame").src = "node-trade-bot.php";
+            
             var history = new XMLHttpRequest();
             
             history.onreadystatechange = function() {
                 if (history.readyState == 4 && history.status == 200) {
                     document.getElementById("txtHint").innerHTML = history.responseText;
+                    removeLoader();
                 }
-            }
+            };
             
+            loader();
             history.open("GET", "history.txt", true);
             history.send();
+        }
+        
+        function loader() {
+            document.getElementById("loader").style.visibility = "";
+            document.getElementById("loader").style.display = "";
+        }
+        
+        function removeLoader() {
+            document.getElementById("loader").style.visibility = "hidden";
+            document.getElementById("loader").style.display = "none";
         }
         </script>
     </head>
     <body>
         <button type="button" onclick="location.reload();">Update</button>
         <p>Donations:</p>
+        <img id="loader" src="http://i.imgur.com/9fiBYzW.gif"></img>
         <span id="txtHint"></span>
         <iframe id="frame" src="about:blank" style="visibility:hidden;display:none"></iframe>
     </body>
