@@ -6,7 +6,7 @@
             
             setInterval(function() {
                 update();
-            }, 10000);
+            }, 5000);
         };
         
         function update() {
@@ -23,7 +23,7 @@
             };
             
             loader();
-            history.open("GET", "history.txt", true);
+            history.open("GET", "history.txt?nocache=" + (Math.floor(Math.random() * 6) + 1).toString(), true);
             history.send();
         }
         
