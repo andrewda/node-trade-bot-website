@@ -1,13 +1,7 @@
 <html>
     <head>
         <script src="https://cdn.socket.io/socket.io-1.3.7.js"></script>
-        <script>
-            var socket = io();
-            
-            socket.on('donation', function(data) {
-                document.getElementById('donations').innerHTML += data.steamid + ": Donated " + data.items + " items <br>";
-            });
-        </script>
+        <script src="main.js"></script>
     </head>
     <body>
         <p>Donations:</p>
