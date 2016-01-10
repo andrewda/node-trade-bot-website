@@ -1,48 +1,16 @@
 <html>
     <head>
+        <script src="https://cdn.socket.io/socket.io-1.3.7.js"></script>
         <script>
-        window.onload = function() {
-            update();
+            var socket = io();
             
-            setInterval(function() {
-                update();
-            }, 5000);
-        };
-        
-        function update() {
-            document.getElementById("frame").src = "about:blank";
-            document.getElementById("frame").src = "node-trade-bot.php";
-            
-            var history = new XMLHttpRequest();
-            
-            history.onreadystatechange = function() {
-                if (history.readyState == 4 && history.status == 200) {
-                    document.getElementById("txtHint").innerHTML = history.responseText;
-                    removeLoader();
-                }
-            };
-            
-            loader();
-            history.open("GET", "history.txt?nocache=" + (Math.floor(Math.random() * 6) + 1).toString(), true);
-            history.send();
-        }
-        
-        function loader() {
-            document.getElementById("loader").style.visibility = "";
-            document.getElementById("loader").style.display = "";
-        }
-        
-        function removeLoader() {
-            document.getElementById("loader").style.visibility = "hidden";
-            document.getElementById("loader").style.display = "none";
-        }
+            socket.on('donation', function(data) {
+                document.getElementById('donations').innerHTML += data.steamid + ": Donated " + data.items + " items <br>";
+            });
         </script>
     </head>
     <body>
-        <button type="button" onclick="location.reload();">Update</button>
         <p>Donations:</p>
-        <img id="loader" src="http://i.imgur.com/9fiBYzW.gif"></img>
-        <span id="txtHint"></span>
-        <iframe id="frame" src="about:blank" style="visibility:hidden;display:none"></iframe>
+        <div id="donations"></div>
     </body>
 </html>
